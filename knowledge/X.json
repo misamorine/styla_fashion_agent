@@ -1,0 +1,47 @@
+{
+  "shape":"X",
+  "name":"Hourglass",
+
+  "summary":"Bust and hips are balanced with a naturally defined waist.",
+
+  "style_goal":"Maintain natural balance while highlighting the waist.",
+
+  "characteristics":[
+    "Balanced bust and hips",
+    "Clearly defined waist"
+  ],
+
+  "recommendations":{
+    "tops":[
+      {"item":"Fitted Tops","priority":5,"reason":"Maintains natural proportions."}
+    ],
+
+    "bottoms":[
+      {"item":"High Waist Jeans","priority":5,"reason":"Highlights waist."}
+    ],
+
+    "necklines":[
+      {"item":"V Neck","priority":5,"reason":"Maintains balance."},
+      {"item":"Sweetheart Neck","priority":5,"reason":"Flatters bust."}
+    ],
+
+    "dresses":[
+      {"item":"Wrap Dress","priority":5,"reason":"Enhances waist."},
+      {"item":"Bodycon Dress","priority":4,"reason":"Shows natural curves."}
+    ]
+  },
+
+  "avoid":[
+    "Oversized shapeless clothing",
+    "Very boxy tops"
+  ],
+
+  "reasoning":{
+    "overall":"Maintain the body's natural balance instead of hiding it."
+  },
+
+  "styling_tips":[
+    "Waist definition should always remain visible.",
+    "Avoid drowning the body in oversized clothes."
+  ]
+}

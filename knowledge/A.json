@@ -1,0 +1,75 @@
+{
+  "shape": "A",
+  "name": "Pear",
+
+  "summary": "Hips are wider than the bust with a well-defined waist.",
+
+  "style_goal": "Balance the upper and lower body by visually broadening the shoulders and drawing attention upward.",
+
+  "characteristics": [
+    "Bust smaller than hips",
+    "Defined waist",
+    "Lower body carries more visual weight"
+  ],
+
+  "recommendations": {
+    "tops": [
+      {"item":"Structured Tops","priority":5,"reason":"Adds width to the upper body."},
+      {"item":"Bright Colored Tops","priority":5,"reason":"Draws attention upward."},
+      {"item":"Printed Tops","priority":4,"reason":"Creates visual volume on top."}
+    ],
+
+    "bottoms":[
+      {"item":"Straight-leg Pants","priority":5,"reason":"Balances wider hips."},
+      {"item":"Wide-leg Trousers","priority":5,"reason":"Creates smooth silhouette."},
+      {"item":"Dark Jeans","priority":5,"reason":"Minimizes hip emphasis."}
+    ],
+
+    "necklines":[
+      {"item":"Boat Neck","priority":5,"reason":"Broadens shoulder appearance."},
+      {"item":"Square Neck","priority":5,"reason":"Balances upper body."},
+      {"item":"Off Shoulder","priority":4,"reason":"Adds shoulder width."},
+      {"item":"Sweetheart Neck","priority":4,"reason":"Enhances bust area."}
+    ],
+
+    "sleeves":[
+      {"item":"Puff Sleeves","priority":5,"reason":"Adds volume near shoulders."},
+      {"item":"Statement Sleeves","priority":4,"reason":"Creates upper-body focus."}
+    ],
+
+    "dresses":[
+      {"item":"Fit and Flare","priority":5,"reason":"Highlights waist while balancing hips."},
+      {"item":"A-Line Dress","priority":5,"reason":"Skims over hips."}
+    ],
+
+    "jackets":[
+      {"item":"Shoulder Structured Blazer","priority":5,"reason":"Creates shoulder balance."}
+    ],
+
+    "prints":[
+      {"item":"Prints on Top","priority":5,"reason":"Moves visual attention upward."}
+    ],
+
+    "colors":[
+      {"item":"Bright Tops + Dark Bottoms","priority":5,"reason":"Balances proportions."}
+    ]
+  },
+
+  "avoid":[
+    "Hip embellishments",
+    "Very skinny jeans",
+    "Cargo pockets on hips",
+    "Light colored bottoms",
+    "Large hip prints"
+  ],
+
+  "reasoning":{
+    "overall":"The goal is to visually widen the shoulders while reducing emphasis on the hips."
+  },
+
+  "styling_tips":[
+    "Statement necklaces help pull attention upward.",
+    "Layering on the upper body creates balance.",
+    "Keep bottoms simple and darker than tops."
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "business dinner": {
+    "dress_code": "Smart formal evening business wear",
+    "must_have_slots": ["layer", "top", "bottom", "footwear", "accessory"],
+    "preferred_slots": {
+      "layer": ["blazer", "suit jacket", "structured jacket"],
+      "top": ["oxford shirt", "formal shirt", "dress shirt"],
+      "bottom": ["formal trouser", "chinos", "tailored trouser"],
+      "footwear": ["oxford shoes", "derby shoes", "loafers"],
+      "accessory": ["belt", "watch", "pocket square"]
+    },
+    "preferred_colors": ["black", "navy", "white", "grey", "charcoal", "brown"],
+    "avoid_keywords": ["shorts", "flip", "sandals", "swim", "hoodie", "gym", "sleep", "bikini", "lingerie", "mini skirt", "heels"],
+    "style_principles": [
+      "Keep the silhouette clean and structured.",
+      "Use darker evening tones for the layer or bottom.",
+      "Keep footwear polished rather than sporty.",
+      "Avoid loud casual pieces unless the dinner is explicitly relaxed."
+    ]
+  },
+  "office": {
+    "dress_code": "Business casual to formal office wear",
+    "must_have_slots": ["top", "bottom", "footwear", "accessory"],
+    "preferred_slots": {
+      "layer": ["blazer", "cardigan", "light jacket"],
+      "top": ["formal shirt", "polo", "blouse"],
+      "bottom": ["trouser", "chinos", "formal pants"],
+      "footwear": ["loafers", "oxford shoes", "formal shoes"],
+      "accessory": ["belt", "watch"]
+    },
+    "preferred_colors": ["white", "blue", "navy", "grey", "black", "beige"],
+    "avoid_keywords": ["shorts", "flip", "sandals", "swim", "party", "sleep", "bikini", "lingerie"],
+    "style_principles": [
+      "Prioritize comfort without losing polish.",
+      "Neutral colors work best for repeat office wear.",
+      "Use accessories minimally."
+    ]
+  },
+  "wedding": {
+    "dress_code": "Formal festive wear",
+    "must_have_slots": ["layer", "top", "bottom", "footwear", "accessory"],
+    "preferred_slots": {
+      "layer": ["suit jacket", "blazer", "sherwani", "ethnic jacket"],
+      "top": ["shirt", "kurta", "dress shirt"],
+      "bottom": ["formal trouser", "ethnic bottom", "tailored pants"],
+      "footwear": ["formal shoes", "loafers", "ethnic footwear"],
+      "accessory": ["watch", "pocket square", "tie", "belt"]
+    },
+    "preferred_colors": ["navy", "black", "maroon", "cream", "beige", "gold", "white"],
+    "avoid_keywords": ["gym", "swim", "sleep", "flip", "shorts"],
+    "style_principles": [
+      "The outfit can be more expressive than office wear.",
+      "Use one statement piece and keep the rest balanced.",
+      "Footwear should still look occasion-appropriate."
+    ]
+  },
+  "college": {
+    "dress_code": "Casual comfortable student wear",
+    "must_have_slots": ["top", "bottom", "footwear"],
+    "preferred_slots": {
+      "top": ["t-shirt", "shirt", "polo", "hoodie"],
+      "bottom": ["jeans", "chinos", "casual pants"],
+      "footwear": ["sneakers", "casual shoes"],
+      "accessory": ["backpack", "watch"]
+    },
+    "preferred_colors": ["black", "white", "blue", "green", "grey", "beige"],
+    "avoid_keywords": ["bikini", "lingerie", "sleep", "swim"],
+    "style_principles": [
+      "Keep the look practical and easy to repeat.",
+      "Sneakers and casual layers are acceptable.",
+      "Avoid overly formal pieces unless needed for presentations."
+    ]
+  },
+  "casual outing": {
+    "dress_code": "Relaxed smart casual wear",
+    "must_have_slots": ["top", "bottom", "footwear"],
+    "preferred_slots": {
+      "layer": ["casual jacket", "overshirt"],
+      "top": ["t-shirt", "shirt", "polo"],
+      "bottom": ["jeans", "chinos", "casual pants"],
+      "footwear": ["sneakers", "loafers", "casual shoes"],
+      "accessory": ["watch", "belt"]
+    },
+    "preferred_colors": ["black", "white", "blue", "beige", "olive", "grey"],
+    "avoid_keywords": ["bikini", "lingerie", "sleep"],
+    "style_principles": [
+      "Balance comfort with a clean appearance.",
+      "One relaxed statement item is enough.",
+      "Avoid combining too many loud colors."
+    ]
+  }
+}

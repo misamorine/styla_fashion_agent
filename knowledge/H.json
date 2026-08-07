@@ -1,0 +1,52 @@
+{
+  "shape":"H",
+  "name":"Rectangle",
+
+  "summary":"Bust, waist and hips have similar width.",
+
+  "style_goal":"Create the illusion of a defined waist and balanced curves.",
+
+  "characteristics":[
+    "Straight body line",
+    "Minimal waist definition",
+    "Balanced shoulders and hips"
+  ],
+
+  "recommendations":{
+    "tops":[
+      {"item":"Wrap Tops","priority":5,"reason":"Creates waist definition."},
+      {"item":"Peplum Tops","priority":5,"reason":"Adds curves."}
+    ],
+
+    "bottoms":[
+      {"item":"High Waist Jeans","priority":5,"reason":"Defines waist."},
+      {"item":"Wide Leg Pants","priority":4,"reason":"Creates shape."}
+    ],
+
+    "necklines":[
+      {"item":"Sweetheart Neck","priority":5,"reason":"Adds softness."},
+      {"item":"V Neck","priority":4,"reason":"Creates vertical definition."}
+    ],
+
+    "dresses":[
+      {"item":"Wrap Dress","priority":5,"reason":"Creates hourglass illusion."},
+      {"item":"Belted Dress","priority":5,"reason":"Highlights waist."}
+    ]
+  },
+
+  "avoid":[
+    "Very boxy silhouettes",
+    "Straight oversized dresses",
+    "Drop waist styles"
+  ],
+
+  "reasoning":{
+    "overall":"Create curves and emphasize the waist."
+  },
+
+  "styling_tips":[
+    "Belts are your best friend.",
+    "Layering creates dimension.",
+    "Choose fitted over boxy clothing."
+  ]
+}

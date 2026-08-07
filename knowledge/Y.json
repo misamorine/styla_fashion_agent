@@ -1,0 +1,51 @@
+{
+  "shape":"Y",
+  "name":"Inverted Triangle",
+
+  "summary":"Bust and shoulders are wider than the hips.",
+
+  "style_goal":"Balance the silhouette by adding visual weight to the lower body.",
+
+  "characteristics":[
+    "Broad shoulders",
+    "Bust wider than hips",
+    "Slim lower body"
+  ],
+
+  "recommendations":{
+    "tops":[
+      {"item":"Simple Tops","priority":5,"reason":"Avoid adding extra shoulder width."}
+    ],
+
+    "bottoms":[
+      {"item":"Wide Leg Pants","priority":5,"reason":"Adds lower body volume."},
+      {"item":"Printed Skirts","priority":5,"reason":"Draws attention downward."},
+      {"item":"Light Colored Bottoms","priority":5,"reason":"Balances proportions."}
+    ],
+
+    "necklines":[
+      {"item":"V Neck","priority":5,"reason":"Softens shoulder width."}
+    ],
+
+    "dresses":[
+      {"item":"A-Line Dress","priority":5,"reason":"Balances upper body."}
+    ]
+  },
+
+  "avoid":[
+    "Puff sleeves",
+    "Shoulder pads",
+    "Boat neck",
+    "Heavy shoulder embellishments"
+  ],
+
+  "reasoning":{
+    "overall":"Increase visual width of the hips while softening the shoulders."
+  },
+
+  "styling_tips":[
+    "Keep tops simple.",
+    "Use bold colors and prints on bottoms.",
+    "Avoid shoulder-heavy details."
+  ]
+}

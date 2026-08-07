@@ -1,0 +1,93 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+.build/
+dist/
+downloads/
+build/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# dotenv
+.env
+.env.*
+
+# virtualenv
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Streamlit
+.streamlit/
+
+# Local data
+fashion_vector_db_v2/
+wardrobe_images/
+wardrobe_db.json
+fashion_item_images/
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+
+# Python compiled files
+*.pyc
+
+# SQLite
+*.sqlite3
+
+# Model / cache directories
+.cache/
