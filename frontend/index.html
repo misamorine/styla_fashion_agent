@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Personal Stylist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">&#10054;</span>
+      <div class="brand-text">
+        <h1>Personal Stylist</h1>
+        <p>Outfits built from your wardrobe and live store picks, matched to your body shape.</p>
+      </div>
+    </div>
+    <div class="wardrobe-pill" id="wardrobeCountPill">Wardrobe: — items</div>
+  </header>
+
+  <nav class="tab-rail" id="tabRail">
+    <button class="tab-btn active" data-tab="create-outfit">
+      <span class="tab-num">01</span> Create Outfit
+    </button>
+    <button class="tab-btn" data-tab="shop-for-you">
+      <span class="tab-num">02</span> Shop For You
+    </button>
+    <button class="tab-btn" data-tab="body-shape">
+      <span class="tab-num">03</span> Body Shape
+    </button>
+    <button class="tab-btn" data-tab="wardrobe">
+      <span class="tab-num">04</span> My Wardrobe
+    </button>
+    <button class="tab-btn" data-tab="chat">
+      <span class="tab-num">05</span> Stylist Chatbot
+    </button>
+  </nav>
+
+  <main class="tab-panels">
+
+    <!-- ============ CREATE OUTFIT ============ -->
+    <section class="tab-panel active" id="panel-create-outfit">
+      <div class="panel-grid">
+
+        <aside class="control-card">
+          <h2>Styling inputs</h2>
+
+          <label class="field">
+            <span>Gender</span>
+            <select id="co-gender">
+              <option value="female" selected>Female</option>
+              <option value="male">Male</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Occasion</span>
+            <select id="co-occasion">
+              <option value="business dinner" selected>Business dinner</option>
+              <option value="office">Office</option>
+              <option value="wedding">Wedding</option>
+              <option value="college">College</option>
+              <option value="casual outing">Casual outing</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Request / vibe</span>
+            <input type="text" id="co-query" value="blazer outfit for business dinner" />
+          </label>
+
+          <label class="field">
+            <span>Body shape profile</span>
+            <select id="co-body-shape">
+              <option value="">None</option>
+              <optgroup label="Front Silhouette">
+                <option value="A">A — Pear</option>
+                <option value="H">H — Rectangle</option>
+                <option value="X">X — Hourglass</option>
+                <option value="Y">Y — Inverted triangle</option>
+              </optgroup>
+              <optgroup label="Dual Front + Side Profiles">
+                <option value="A-I">A-I — Pear + Balanced Side</option>
+                <option value="A-P">A-P — Pear + Prominent Chest</option>
+                <option value="A-b">A-b — Pear + Prominent Belly</option>
+                <option value="A-B">A-B — Pear + Chest & Belly</option>
+                <option value="A-S">A-S — Pear + Chest & Butt (S-Line)</option>
+                <option value="A-d">A-d — Pear + Prominent Butt</option>
+                <option value="A-db">A-db — Pear + Belly & Butt</option>
+                <option value="A-dB">A-dB — Pear + Full Curve</option>
+
+                <option value="H-I">H-I — Rectangle + Balanced Side</option>
+                <option value="H-P">H-P — Rectangle + Prominent Chest</option>
+                <option value="H-b">H-b — Rectangle + Prominent Belly</option>
+                <option value="H-B">H-B — Rectangle + Chest & Belly</option>
+                <option value="H-S">H-S — Rectangle + Chest & Butt</option>
+                <option value="H-d">H-d — Rectangle + Prominent Butt</option>
+                <option value="H-db">H-db — Rectangle + Belly & Butt</option>
+                <option value="H-dB">H-dB — Rectangle + Full Curve</option>
+
+                <option value="X-I">X-I — Hourglass + Balanced Side</option>
+                <option value="X-P">X-P — Hourglass + Prominent Chest</option>
+                <option value="X-b">X-b — Hourglass + Prominent Belly</option>
+                <option value="X-B">X-B — Hourglass + Chest & Belly</option>
+                <option value="X-S">X-S — Hourglass + Chest & Butt (S-Line)</option>
+                <option value="X-d">X-d — Hourglass + Prominent Butt</option>
+                <option value="X-db">X-db — Hourglass + Belly & Butt</option>
+                <option value="X-dB">X-dB — Hourglass + Full Curve</option>
+
+                <option value="Y-I">Y-I — Inverted Triangle + Balanced Side</option>
+                <option value="Y-P">Y-P — Inverted Triangle + Prominent Chest</option>
+                <option value="Y-b">Y-b — Inverted Triangle + Prominent Belly</option>
+                <option value="Y-B">Y-B — Inverted Triangle + Chest & Belly</option>
+                <option value="Y-S">Y-S — Inverted Triangle + Chest & Butt</option>
+                <option value="Y-d">Y-d — Inverted Triangle + Prominent Butt</option>
+                <option value="Y-db">Y-db — Inverted Triangle + Belly & Butt</option>
+                <option value="Y-dB">Y-dB — Inverted Triangle + Full Curve</option>
+              </optgroup>
+            </select>
+          </label>
+
+
+          <label class="field checkbox-field">
+            <input type="checkbox" id="co-use-wardrobe" checked />
+            <span>Use my wardrobe first</span>
+          </label>
+
+
+
+          <label class="field checkbox-field">
+            <input type="checkbox" id="co-show-debug" />
+            <span>Show match details</span>
+          </label>
+
+          <button class="btn btn-primary btn-block" id="co-submit">Create outfit</button>
+        </aside>
+
+        <div class="results-col">
+          <div class="empty-state" id="co-empty">
+            <p class="swatch-icon">&#10054;</p>
+            <h3>Your look starts here</h3>
+            <p>Set your styling inputs on the left, then create an outfit. Owned wardrobe items are used first; missing pieces are filled from live stores.</p>
+          </div>
+          <div id="co-loading" class="loading-state hidden">
+            <div class="spinner"></div>
+            <p id="co-loading-text">Checking your wardrobe...</p>
+          </div>
+          <div id="co-results" class="hidden"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SHOP FOR YOU ============ -->
+    <section class="tab-panel" id="panel-shop-for-you">
+      <div class="section-intro">
+        <h2>Shop for you</h2>
+        <p>Live store picks matched to your body shape.</p>
+      </div>
+
+      <div id="sfy-no-shape" class="notice-card">
+        We don't have your body shape yet. Open the <strong>Body Shape</strong> tab, upload a full-body photo, and come back here once it's done.
+      </div>
+
+      <div id="sfy-body" class="hidden">
+        <div class="notice-card notice-success" id="sfy-shape-banner"></div>
+
+        <div class="inline-controls">
+          <label class="field">
+            <span>Gender</span>
+            <select id="sfy-gender">
+              <option>Female</option>
+              <option>Male</option>
+              <option>Unisex</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Preferred store</span>
+            <select id="sfy-store">
+              <option>Myntra</option>
+              <option>Ajio</option>
+              <option>Amazon</option>
+              <option>Flipkart</option>
+              <option>H&amp;M</option>
+              <option>Zara</option>
+              <option>Nykaa Fashion</option>
+            </select>
+          </label>
+          <button class="btn btn-primary" id="sfy-submit">Find picks for my body shape</button>
+        </div>
+
+        <div id="sfy-loading" class="loading-state hidden">
+          <div class="spinner"></div>
+          <p>Finding pieces for your shape...</p>
+        </div>
+
+        <div id="sfy-results"></div>
+      </div>
+    </section>
+
+    <!-- ============ BODY SHAPE ============ -->
+    <section class="tab-panel" id="panel-body-shape">
+      <div class="section-intro">
+        <h2>Dual-View Body Shape Analysis (32 Body Types)</h2>
+        <p>Upload front & side profile photos to analyze both silhouette proportions and side depth contours for 32 combined body shapes.</p>
+      </div>
+
+      <div class="panel-grid">
+        <aside class="control-card">
+          <label class="field">
+            <span>Front-view photo (Required)</span>
+            <input type="file" id="bs-file-front" accept="image/jpeg,image/png,image/jpg" />
+          </label>
+          <img id="bs-preview-front" class="photo-preview hidden" alt="Front photo" />
+
+          <label class="field">
+            <span>Side-view photo (Optional for side profile)</span>
+            <input type="file" id="bs-file-side" accept="image/jpeg,image/png,image/jpg" />
+          </label>
+          <img id="bs-preview-side" class="photo-preview hidden" alt="Side photo" />
+
+          <button class="btn btn-primary btn-block" id="bs-submit" disabled>Analyze Dual Body Shape</button>
+        </aside>
+
+
+        <div class="results-col">
+          <div id="bs-loading" class="loading-state hidden">
+            <div class="spinner"></div>
+            <p>Analyzing your photo...</p>
+          </div>
+          <div id="bs-results" class="hidden">
+            <div class="notice-card notice-success" id="bs-shape-banner"></div>
+            <div class="card advice-card">
+              <h3>Your personalized styling advice</h3>
+              <div class="advice-scroll" id="bs-advice"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MY WARDROBE ============ -->
+    <section class="tab-panel" id="panel-wardrobe">
+      <div class="section-intro">
+        <h2>My wardrobe</h2>
+        <p>Upload clothes you already own. The stylist uses these first and suggests only missing items to buy.</p>
+      </div>
+
+      <details class="card add-item-card" open>
+        <summary>Add wardrobe item</summary>
+        <div class="add-item-body">
+          <label class="field">
+            <span>Item photo</span>
+            <input type="file" id="wd-file" accept="image/jpeg,image/png,image/jpg" />
+          </label>
+          <label class="field">
+            <span>Item name</span>
+            <input type="text" id="wd-title" placeholder="white oxford shirt, black blazer, brown loafers" />
+          </label>
+          <label class="field">
+            <span>Description / notes</span>
+            <textarea id="wd-description" rows="2" placeholder="formal cotton shirt, slim fit, good for office"></textarea>
+          </label>
+          <div class="quad-grid">
+            <label class="field">
+              <span>Gender</span>
+              <select id="wd-gender">
+                <option>auto</option><option>male</option><option>female</option><option>unisex</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Slot</span>
+              <select id="wd-slot">
+                <option>auto</option><option>layer</option><option>top</option><option>bottom</option><option>footwear</option><option>accessory</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Color</span>
+              <select id="wd-color">
+                <option>auto</option><option>black</option><option>navy</option><option>white</option><option>brown</option><option>grey</option><option>charcoal</option><option>beige</option><option>blue</option><option>cream</option><option>olive</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Occasion group</span>
+              <select id="wd-occasion">
+                <option>auto</option><option>business</option><option>formal</option><option>smart casual</option><option>casual</option><option>wedding</option><option>party</option><option>ethnic</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn btn-primary" id="wd-submit">Save to wardrobe</button>
+        </div>
+      </details>
+
+      <div class="wardrobe-meta">
+        <span id="wd-count">0 items</span>
+        <button class="btn btn-ghost btn-danger" id="wd-clear">Clear complete wardrobe</button>
+      </div>
+
+      <div id="wd-empty" class="notice-card">No wardrobe items yet. Add 3-5 items first: a shirt, blazer, trouser, shoes, and belt.</div>
+      <div class="card-grid" id="wd-grid"></div>
+    </section>
+
+    <!-- ============ CHATBOT ============ -->
+    <section class="tab-panel" id="panel-chat">
+      <div class="section-intro">
+        <h2>AI stylist chatbot</h2>
+        <p>Chat with your personal AI stylist. Ask about outfits, body shape styling, live store items, or your saved wardrobe.</p>
+      </div>
+
+      <div class="chat-shell">
+        <div class="chat-log" id="chat-log"></div>
+        <form class="chat-input-row" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask your AI Stylist (e.g. 'What tops suit an Hourglass shape?')" autocomplete="off" />
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<template id="tpl-item-card">
+  <div class="item-card">
+    <div class="item-image-wrap">
+      <img class="item-image" alt="" />
+      <span class="owned-badge"></span>
+    </div>
+    <div class="item-body">
+      <div class="item-slot"></div>
+      <div class="item-title"></div>
+      <div class="item-price"></div>
+      <div class="item-meta"></div>
+      <div class="item-actions"></div>
+      <div class="item-debug hidden"></div>
+    </div>
+  </div>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>

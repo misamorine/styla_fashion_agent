@@ -60,13 +60,14 @@ def search_live_products(query: str, store: str = "All Stores") -> str:
 @tool
 def get_body_shape_styling_tips(body_shape: str) -> str:
     """Retrieves body-shape specific fashion recommendations and rules.
-    Accepted body_shape values: 'A' (Pear), 'H' (Rectangle), 'X' (Hourglass), 'Y' (Inverted Triangle).
+    Accepted body_shape values: Single shapes ('A', 'H', 'X', 'Y', 'B', 'P', etc.) or 2-view combined codes ('A-B', 'X-S', 'H-b', etc.).
     """
     try:
         kr = KnowledgeRetriever()
-        return kr.get_advice_with_langchain(body_shape.strip().upper())
+        return kr.get_advice_with_langchain(body_shape.strip())
     except Exception as e:
         return f"Error retrieving styling tips for body shape {body_shape}: {e}"
+
 
 
 @tool

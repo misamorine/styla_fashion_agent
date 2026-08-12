@@ -17,7 +17,7 @@ from src.serpapi_service import build_search_query, search_products
 from src.body_shop_queries import load_shape_knowledge, shoppable_queries_for_shape
 
 # Vision & RAG imports (from fashion agent new integration)
-from src.vision.segment2 import detect_body_shape
+from src.vision.segment2 import detect_body_shape, detect_dual_body_shape
 from rag.knowledge_retriever import KnowledgeRetriever
 from rag.prompt_builder import build_prompt
 from rag.llm import generate, get_stylist_llm
@@ -64,11 +64,33 @@ WARDROBE_DB = "./wardrobe_db.json"
 WARDROBE_IMAGE_DIR = "./wardrobe_images"
 
 SHAPE_NAMES = {
+    # Front Profile Shapes
     "A": "Pear Shape (Triangle - Hips wider than bust)",
     "H": "Rectangle Shape (Straight - Similar bust, waist, hip)",
     "X": "Hourglass Shape (Curvy - Balanced bust & hip, narrow waist)",
     "Y": "Inverted Triangle Shape (Broad shoulders / bust wider than hip)",
+    # Side Profile Shapes
+    "I": "Balanced Side Profile (Neutral side depth)",
+    "P": "Prominent Chest Side Profile",
+    "b": "Prominent Belly Side Profile",
+    "B": "Prominent Chest & Belly Side Profile",
+    "S": "Prominent Chest & Butt Side Profile (S-Line)",
+    "d": "Prominent Butt Side Profile",
+    "db": "Prominent Belly & Butt Side Profile",
+    "dB": "Full-Curve Side Profile (Chest, Belly & Butt)",
 }
+
+
+def get_shape_display_name(code: str) -> str:
+    if not code or code == "None":
+        return "Not Specified"
+    if "-" in code:
+        parts = code.split("-")
+        front_name = SHAPE_NAMES.get(parts[0], f"Front {parts[0]}")
+        side_name = SHAPE_NAMES.get(parts[1], f"Side {parts[1]}")
+        return f"{front_name} + {side_name} ({code})"
+    return SHAPE_NAMES.get(code, f"Shape {code}")
+
 
 SLOT_NAME_TEMPLATES = {
     "layer": ["Tailored Double-Breasted Blazer", "Structured Wool-Blend Coat", "Casual Overshirt Jacket", "Slim-Fit Suit Jacket"],
@@ -336,73 +358,95 @@ def render_wardrobe_page(manager: WardrobeManager):
 
 
 def render_body_shape_page():
-    st.subheader("Body Shape Analysis")
-    st.caption("Upload a full-body photo and we'll work out your body shape and put together styling advice just for you.")
+    st.subheader("Dual-View Body Shape Analysis (32 Body Types)")
+    st.caption("Upload front & side profile photos to analyze both silhouette proportions and side depth contours for 32 combined body shapes.")
 
-    uploaded_file = st.file_uploader("Upload full-body photo", type=["jpg", "jpeg", "png"], key="body_photo_upload_main")
+    col_front, col_side = st.columns(2, gap="medium")
+    with col_front:
+        uploaded_front = st.file_uploader("Upload Front-View Photo (Required)", type=["jpg", "jpeg", "png"], key="body_photo_upload_front")
+    with col_side:
+        uploaded_side = st.file_uploader("Upload Side-View Photo (Optional for Side Profile)", type=["jpg", "jpeg", "png"], key="body_photo_upload_side")
 
-    if uploaded_file is not None:
-        temp = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
-        temp.write(uploaded_file.read())
-        temp.close()
-        image_path = temp.name
+    front_path = None
+    side_path = None
 
-        st.image(image_path, width=320, caption="Your photo")
+    if uploaded_front is not None:
+        temp_f = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+        temp_f.write(uploaded_front.read())
+        temp_f.close()
+        front_path = temp_f.name
 
-        if st.button("Analyze My Body Shape", type="primary"):
-            progress = st.progress(0, text="Analyzing your photo...")
+    if uploaded_side is not None:
+        temp_s = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+        temp_s.write(uploaded_side.read())
+        temp_s.close()
+        side_path = temp_s.name
+
+    if front_path:
+        st.divider()
+        img_col1, img_col2 = st.columns(2)
+        with img_col1:
+            st.image(front_path, width=280, caption="Front Profile Photo")
+        with img_col2:
+            if side_path:
+                st.image(side_path, width=280, caption="Side Profile Photo")
+
+        if st.button("Analyze Dual Body Shape", type="primary"):
+            progress = st.progress(0, text="Analyzing front silhouette...")
             try:
-                shape = detect_body_shape(image_path)
+                front_shape, side_shape, combined_shape = detect_dual_body_shape(front_path, side_path)
             except Exception as e:
                 progress.empty()
                 st.error(f"Error analyzing body shape: {e}")
                 return
-            progress.progress(40, text="Analyzing your photo...")
+            
+            progress.progress(50, text="Analyzing side profile contours...")
+            st.session_state["detected_body_shape"] = combined_shape
+            st.session_state["detected_front_shape"] = front_shape
+            st.session_state["detected_side_shape"] = side_shape
 
-            st.session_state["detected_body_shape"] = shape
-
-            progress.progress(70, text="Finding styling guidance for you...")
+            progress.progress(75, text="Retrieving dual-view styling knowledge...")
             try:
                 kr = KnowledgeRetriever()
-                k_res = kr.retrieve(shape)
-                knowledge_doc = k_res[0]["document"] if k_res else f"Knowledge for shape {shape}"
+                advice = kr.get_advice_with_langchain(combined_shape)
             except Exception as e:
-                knowledge_doc = f"Body shape {shape} rules"
+                advice = f"Styling rules generated for {combined_shape}."
 
-            progress.progress(90, text="Putting together your styling advice...")
-            prompt = build_prompt(shape, knowledge_doc)
-            advice = generate(prompt)
             st.session_state["body_shape_advice"] = advice
             progress.progress(100, text="Done!")
             progress.empty()
 
     if "detected_body_shape" in st.session_state:
         shape = st.session_state["detected_body_shape"]
-        full_name = SHAPE_NAMES.get(shape, f"Shape {shape}")
+        front_shape = st.session_state.get("detected_front_shape", shape.split("-")[0])
+        side_shape = st.session_state.get("detected_side_shape", shape.split("-")[1] if "-" in shape else "I")
+        
+        display_name = get_shape_display_name(shape)
+        front_name = SHAPE_NAMES.get(front_shape, f"Front {front_shape}")
+        side_name = SHAPE_NAMES.get(side_shape, f"Side {side_shape}")
 
-        st.success(f"Your Body Shape: **{shape}** ({full_name})")
+        st.success(f"Detected Body Profile: **{shape}** — {display_name}")
 
         c1, c2 = st.columns([1, 2], gap="medium")
         with c1:
-            st.metric("Body Shape", shape)
-            st.info(f"Classified as: **{full_name}**")
-            st.write(
-                "This shape is used to personalize your shopping picks "
-                "and how outfits are scored for you."
-            )
-            st.caption("Open the **Shop For You** tab to see picks for this shape.")
+            st.metric("Combined Profile Code", shape)
+            st.metric("Front Silhouette", front_shape, help=front_name)
+            st.metric("Side Profile Contour", side_shape, help=side_name)
+            st.info(f"**Classification**: {display_name}")
+            st.caption("Open **Shop For You** or **Create Outfit** tabs to see tailored picks for this profile.")
 
         with c2:
-            st.subheader("Your Personalized Styling Advice")
+            st.subheader("Your Personalized Dual-View Styling Advice")
             advice = st.session_state.get("body_shape_advice", "")
             st.markdown(
                 f"""
-                <div style="height:420px; overflow-y:auto; padding:16px; border:1px solid rgba(128,128,128,0.3); border-radius:12px; background:rgba(255,255,255,0.03);">
+                <div style="height:460px; overflow-y:auto; padding:16px; border:1px solid rgba(128,128,128,0.3); border-radius:12px; background:rgba(255,255,255,0.03);">
                 {advice}
                 </div>
                 """,
                 unsafe_allow_html=True
             )
+
 
 
 def render_owned_vs_missing(look: dict):
@@ -678,26 +722,31 @@ def run_app():
             query = st.text_input("Request / Vibe", "blazer outfit for business dinner")
 
             detected_shape = st.session_state.get("detected_body_shape", None)
-            shape_options = ["None", "A", "H", "X", "Y"]
+            base_options = [
+                "None",
+                "A", "A-I", "A-P", "A-b", "A-B", "A-S", "A-d", "A-db", "A-dB",
+                "H", "H-I", "H-P", "H-b", "H-B", "H-S", "H-d", "H-db", "H-dB",
+                "X", "X-I", "X-P", "X-b", "X-B", "X-S", "X-d", "X-db", "X-dB",
+                "Y", "Y-I", "Y-P", "Y-b", "Y-B", "Y-S", "Y-d", "Y-db", "Y-dB"
+            ]
+            shape_options = list(base_options)
+            if detected_shape and detected_shape not in shape_options:
+                shape_options.append(detected_shape)
+
             default_index = shape_options.index(detected_shape) if detected_shape in shape_options else 0
             body_shape_choice = st.selectbox(
-                "Body Shape",
+                "Body Shape Profile",
                 shape_options,
                 index=default_index,
-                help="A: Pear | H: Rectangle | X: Hourglass | Y: Inverted Triangle"
+                help="Front Silhouette (A/H/X/Y) + Side Profile Contour (I/P/b/B/S/d/db/dB)"
             )
             body_shape_arg = None if body_shape_choice == "None" else body_shape_choice
+
 
             use_wardrobe_first = st.checkbox(
                 "Use my wardrobe first",
                 value=True,
-                help="If enabled, owned wardrobe items are preferred. Missing slots are filled with live store picks.",
-            )
-            preferred_store = st.selectbox(
-                "Shopping Platform",
-                ["All Stores", "Myntra", "Amazon.in", "Nykaa Fashion", "Ajio", "Flipkart", "H&M", "Zara"],
-                index=1,
-                help="Buy Now links prefer this store when available",
+                help="If enabled, owned wardrobe items are preferred. Missing slots are filled with Marqo Polyvore dataset items.",
             )
             view_mode = st.radio(
                 "Visualization",
@@ -711,11 +760,11 @@ def run_app():
         st.info(f"Wardrobe items saved: {wardrobe.count()}")
         st.caption(
             "Create Outfit uses your wardrobe when enabled, then fills in missing pieces with "
-            "live store picks based on occasion and body shape."
+            "items from the Marqo Polyvore dataset matching your occasion and body shape."
         )
 
         if st.button("Create Outfit", type="primary"):
-            progress = st.progress(15, text="Checking your wardrobe...")
+            progress = st.progress(15, text="Checking your wardrobe & catalog dataset...")
 
             retriever = None
             if count > 0:
@@ -728,10 +777,10 @@ def run_app():
             look = composer.compose(
                 intent,
                 use_wardrobe_first=use_wardrobe_first,
-                preferred_store=preferred_store,
-                use_live_api=True,
-                catalog_fallback=count > 0,
+                use_live_api=False,
+                catalog_fallback=True,
             )
+
 
             advice_text = ""
             if intent.body_shape:

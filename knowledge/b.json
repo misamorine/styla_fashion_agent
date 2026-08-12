@@ -1,0 +1,43 @@
+{
+  "shape": "B",
+  "name": "Prominent Chest & Belly Side Profile",
+  "summary": "Fuller forward protrusion along both upper and mid-torso profile.",
+  "style_goal": "Elongate the front vertical line, streamline side depth, and create clean tailored structure.",
+  "characteristics": [
+    "Prominent bust depth",
+    "Prominent belly depth"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Flowing Tunic Tops", "priority": 5, "reason": "Drapes uninterrupted over chest and belly."},
+      {"item": "Button-Down Vertical Stripe Shirts", "priority": 5, "reason": "Adds vertical visual lines."}
+    ],
+    "bottoms": [
+      {"item": "Straight-Leg Dark Pants", "priority": 5, "reason": "Balances front torso volume."}
+    ],
+    "necklines": [
+      {"item": "V-Neck", "priority": 5, "reason": "Creates elongating vertical focal point."}
+    ],
+    "dresses": [
+      {"item": "Shift Dress", "priority": 5, "reason": "Hangs freely from shoulders without midsection waist pinch."}
+    ],
+    "jackets": [
+      {"item": "Structured Open Blazer", "priority": 5, "reason": "Flattens side profile contours."}
+    ],
+    "colors": [
+      {"item": "Monochromatic Outfits", "priority": 5, "reason": "Creates cohesive vertical silhouette."}
+    ]
+  },
+  "avoid": [
+    "Double-breasted boxy coats",
+    "Stiff horizontal stripes",
+    "High waist belts cinched tight"
+  ],
+  "reasoning": {
+    "overall": "Vertical lines, open jackets, and shift cuts streamline forward torso volume."
+  },
+  "styling_tips": [
+    "Wear dark inner layers with contrasting open outer jackets to create slimming vertical side columns.",
+    "Avoid tight necklines and bulky chest pockets."
+  ]
+}

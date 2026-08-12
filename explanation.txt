@@ -1,0 +1,380 @@
+Repository Explanation
+
+This file lists repository files and summarizes each file's purpose. For Python files it lists functions/classes found (signature) with a short description, inputs and outputs where available.
+
+File: app.py
+- Purpose: Frontend helper module for rendering HTML components and pages used by the server-side UI.
+- Functions:
+  - render_view_similar_links(title: str, gender: str = "", preferred_store: str = "All Stores") -> None
+    - Use: Render links for similar product views.
+    - Inputs: title (str), gender (str, optional), preferred_store (str, optional)
+    - Output: None / side-effect: writes HTML.
+  - cli() -> None
+    - Use: CLI entry point for running dev helpers.
+    - Inputs: none
+    - Output: None
+  - enrich_product_display(item: dict) -> dict
+    - Use: Add derived fields (e.g., media URL) to product dict.
+    - Inputs: item (dict)
+    - Output: enriched item (dict)
+  - _render_item_image(item: dict) -> None
+    - Use: Helper to render an item's image block.
+    - Inputs: item (dict)
+    - Output: None
+  - _render_buy_or_similar(item: dict) -> None
+    - Use: Render buy button or similar suggestions.
+    - Inputs: item (dict)
+    - Output: None
+  - inject_card_css() -> None
+    - Use: Inject CSS used by rendered cards.
+    - Inputs: none
+    - Output: None
+  - render_item_card(item, slot_name: str, show_debug: bool = True) -> None
+    - Use: Render an item card for a slot.
+    - Inputs: item (dict), slot_name (str), show_debug (bool)
+    - Output: None
+  - render_visual_card(item, slot_name: str, show_debug: bool = False) -> None
+    - Use: Render a visual-focused card.
+    - Inputs: item, slot_name, show_debug
+    - Output: None
+  - render_card_grid(items_by_slot, columns: int = 3, show_debug: bool = False) -> None
+    - Use: Layout multiple cards in a grid.
+    - Inputs: items_by_slot (dict), columns (int), show_debug
+    - Output: None
+  - render_alternative_cards(alternatives, columns: int = 4, show_debug: bool = False) -> None
+    - Use: Render alternative product cards.
+    - Inputs: alternatives (list/dict), columns, show_debug
+    - Output: None
+  - render_wardrobe_item(item, show_delete: bool = False, manager=None) -> None
+    - Use: Render a wardrobe item row.
+    - Inputs: item (dict), show_delete (bool), manager (WardrobeManager)
+    - Output: None
+  - render_wardrobe_page(manager: WardrobeManager) -> None
+    - Use: Render the wardrobe management page.
+    - Inputs: manager (WardrobeManager)
+    - Output: None
+  - render_body_shape_page() -> None
+    - Use: Render body-shape analysis page.
+    - Inputs: none
+    - Output: None
+  - render_owned_vs_missing(look: dict) -> None
+    - Use: Display which items are owned vs missing for a composed look.
+    - Inputs: look (dict)
+    - Output: None
+  - render_live_product_card(product: dict) -> None
+    - Use: Render a card for live product search results.
+    - Inputs: product (dict)
+    - Output: None
+  - fetch_body_shape_live_products(...) -> List[dict]
+    - Use: Fetch live products relevant to a body shape (signature truncated in search).
+    - Inputs/Outputs: see implementation.
+  - render_live_recommendations_page() -> None
+    - Use: Render a page with live recommendations.
+  - render_chatbot_page() -> None
+    - Use: Render chatbot interaction page.
+
+File: backend/main.py
+- Purpose: FastAPI backend entrypoints and dependency providers for vector stores, embedder, wardrobe, and knowledge retriever; API routes for composing outfits, wardrobe CRUD, body-shape analysis, and chat/shop endpoints.
+- Functions / Classes:
+  - get_store() -> FashionVectorStore
+    - Use: Dependency provider returning the fashion vector store instance.
+    - Inputs: none
+    - Output: FashionVectorStore
+  - get_wardrobe() -> WardrobeManager
+    - Use: Dependency provider returning the wardrobe manager.
+  - get_embedder() -> FashionEmbedder
+    - Use: Dependency provider for embedder.
+  - get_knowledge_retriever() -> KnowledgeRetriever
+  - enrich_product_display(item: dict) -> dict
+    - Use: Add presentation fields to product dict.
+    - Inputs: item (dict)
+    - Output: dict
+  - build_similar_links(title: str, gender: str = "") -> Dict[str, str]
+  - to_media_url(image_path: Optional[str]) -> Optional[str]
+  - serialize_item(item: dict, gender_hint: str = "") -> dict
+  - serialize_selected(selected: Dict[str, dict], gender_hint: str = "") -> Dict[str, dict]
+  - serialize_alternatives(alternatives: Dict[str, List[dict]], gender_hint: str = "") -> Dict[str, List[dict]]
+  - CreateOutfitRequest(BaseModel) — pydantic model for create outfit requests
+  - ShopForYouRequest(BaseModel)
+  - ChatMessage(BaseModel)
+  - ChatRequest(BaseModel)
+  - health() -> dict/status
+  - meta() -> dict
+  - create_outfit(req: CreateOutfitRequest)
+  - list_wardrobe()
+  - add_wardrobe_item(...) (async)
+  - delete_wardrobe_item(item_id: str) -> None
+  - clear_wardrobe() -> None
+  - analyze_body_shape(photo: UploadFile) (async)
+  - shop_for_you(req: ShopForYouRequest)
+
+File: product_rag/catalog_utils.py
+- Purpose: Utilities for normalizing catalog text (slot, color, gender, occasion) and preparing metadata and images for indexing.
+- Functions:
+  - safe_text(x) -> str
+  - infer_slot(text: str) -> str
+  - infer_color(text: str) -> str
+  - infer_gender(text: str) -> str
+  - infer_occasion_group(text: str) -> str
+  - metadata_from_item(item: Dict, idx: int, image_path: str) -> Dict
+  - save_dataset_image(image, out_dir: Path, idx: int) -> str
+
+File: product_rag/embedder.py
+- Purpose: Image/text embedding class used by product RAG indexing.
+- Class: FashionEmbedder
+  - __init__(model_name: str = "patrickjohncyh/fashion-clip")
+  - text_embedding(self, text: str) -> embedding
+  - image_embedding(self, image) -> embedding
+
+File: product_rag/indexer.py
+- Purpose: Index dataset images and metadata into vector DB.
+- Functions:
+  - get_image_field(item)
+  - index_dataset(limit: int = 2000, dataset_name: str = "Marqo/polyvore", split: str = "data", db_path: str = "./fashion_vector_db_v2", image_dir: str = "./fashion_item_images") -> None
+
+File: product_rag/product_retriever.py
+- Purpose: High-level product retrieval wrapper around the product vector store.
+- Class: ProductRetriever
+  - __init__(...)
+  - retrieve(...) -> List[dict]
+
+File: product_rag/recommendation_parser.py
+- Purpose: Parse LLM responses into structured recommendations.
+- Functions:
+  - extract_recommendations(llm_response: str) -> structured recommendations
+
+File: product_rag/vector_store.py
+- Purpose: Vector store wrapper (Chroma/Marqo wrapper) for fashion vectors used in product RAG.
+- Functions / Class:
+  - and_filter(filters: List[Dict]) -> Optional[Dict]
+  - FashionVectorStore
+    - __init__(db_path: str = "./fashion_vector_db_v2", collection_name: str = "fashion_items_v2")
+    - add(item_id: str, embedding: List[float], document: str, metadata: Dict) -> None
+    - count() -> int
+    - query(query_embedding: List[float], where: Optional[Dict], n_results: int = 30) -> List[dict]
+    - flatten_results(results) -> List[Dict]
+
+File: rag/knowledge_indexer.py
+- Purpose: Index free-text knowledge (JSON) into a retriever (vector index) for RAG.
+- Class: KnowledgeIndexer
+  - __init__(...)
+  - json_to_document(self, data) -> docs
+  - index(self) -> None
+
+File: rag/knowledge_retriever.py
+- Purpose: Retrieve body-shape knowledge and advice for prompt composition.
+- Class: KnowledgeRetriever
+  - __init__(...)
+  - retrieve(self, shape, n_results=1) -> List[dict]
+  - get_advice_with_langchain(self, shape: str) -> str
+
+File: rag/llm.py
+- Purpose: LLM wrapper functions for stylist LLM.
+- Functions:
+  - get_stylist_llm(temperature: float = 0.4, max_tokens: int = 800) -> LLM instance
+  - generate(prompt: str) -> str
+
+File: rag/prompt_builder.py
+- Purpose: Build prompts combining body-shape + knowledge for the stylist LLM.
+- Functions:
+  - build_prompt(body_shape: str, knowledge: str) -> str
+
+File: rag/text_embedder.py
+- Purpose: Text embedder class used by RAG indexer.
+- Class: TextEmbedder
+  - __init__(model_name="BAAI/bge-small-en-v1.5")
+  - embed(self, text: str) -> List[float]
+
+File: rag/vector_store.py
+- Purpose: General fashion vector store for RAG modules (similar to product_rag/vector_store).
+- Functions / Class: same shape as product_rag/vector_store.py
+
+File: src/agent_tools.py
+- Purpose: High-level tool functions exposed to the agent (compose outfit, search, wardrobe lookup, etc.).
+- Functions:
+  - lookup_wardrobe_items(category: str = "") -> str
+    - Use: Returns a textual listing or summary of wardrobe items filtered by category.
+    - Inputs: category
+    - Output: str summary
+  - search_live_products(query: str, store: str = "All Stores") -> str
+  - get_body_shape_styling_tips(body_shape: str) -> str
+  - compose_outfit_recommendation(query: str, gender: str = "female", occasion: str = "casual outing") -> str
+  - get_stylist_tools() -> dict/list
+
+File: src/body_shop_queries.py
+- Purpose: Compose shopping queries tailored to body shapes and convert product text into search terms.
+- Functions:
+  - load_shape_knowledge(shape: str) -> dict[str, Any]
+  - _to_search_term(item_name: str, category: str) -> str
+  - shoppable_queries_for_shape(...) -> List[str]
+
+File: src/catalog_utils.py
+- Purpose: Catalog normalization utilities (mirrors product_rag/catalog_utils).
+- Functions: safe_text, infer_slot, infer_color, infer_gender, infer_occasion_group, metadata_from_item, save_dataset_image
+
+File: src/duckduckgo_retriever.py
+- Purpose: Scrape/search utilities using DuckDuckGo and other storefront heuristics; includes URL normalization and scraping helpers.
+- Functions (selection):
+  - _gender_term(gender: str) -> str
+  - _clean_query(query: str, gender: str) -> str
+  - _normalize_url(url: str) -> str
+  - _normalize_image_url(url: str) -> str
+  - store_from_url(url: str) -> Optional[str]
+  - is_product_page(url: str, store_name: Optional[str] = None) -> bool
+  - canonicalize_product_url(url: str, store_name: Optional[str] = None) -> str
+  - search_url_for_store(store_name: str, query: str, gender: str) -> str
+  - _fetch_html(url: str, timeout: int = 12) -> str
+  - _scrape_amazon_products(...)
+  - _scrape_myntra_products(...)
+  - _safe_images(ddgs: "DDGS", term: str, max_results: int) -> List[Dict]
+  - search_trendy_fashion_products(...) -> List[Dict]
+
+File: src/embedder.py
+- Purpose: Embedding utilities (image & text) for retrieval tasks.
+- Class: FashionEmbedder
+  - __init__(model_name: str = "patrickjohncyh/fashion-clip")
+  - text_embedding(self, text: str) -> vector
+  - image_embedding(self, image) -> vector
+
+File: src/indexer.py
+- Purpose: Indexing routines for local dataset into vector DB.
+- Functions: get_image_field(item), index_dataset(...)
+
+File: src/intent_parser.py
+- Purpose: Parse user queries into structured style intents.
+- Classes/Functions:
+  - StyleIntentPydantic(BaseModel)
+  - StyleIntent (dataclass-like)
+  - parse_intent(query: str, gender: str, occasion: str, body_shape: Optional[str] = None) -> StyleIntent
+  - parse_intent_with_langchain(query: str, gender: str, occasion: str, body_shape: Optional[str] = None) -> StyleIntent
+
+File: src/knowledge_base.py
+- Purpose: Provide fashion knowledge lookups (occasion rules, preferred terms, color preferences, style principles).
+- Functions:
+  - load_fashion_kb(path: str = str(DEFAULT_KB_PATH)) -> Dict[str, Any]
+  - get_occasion_rules(occasion: str) -> Dict[str, Any]
+  - preferred_terms_for_slot(occasion: str, slot: str) -> List[str]
+  - avoid_terms_for_occasion(occasion: str) -> List[str]
+  - preferred_colors_for_occasion(occasion: str) -> List[str]
+  - style_principles_for_occasion(occasion: str) -> List[str]
+  - dress_code_for_occasion(occasion: str) -> str
+
+File: src/live_outfit_search.py
+- Purpose: Convert intents into live search queries and transform SERP/API results into outfit items.
+- Functions:
+  - normalize_shopping_store(preferred_store: str) -> str
+  - gender_for_serpapi(gender: str) -> str
+  - build_slot_search_term(intent, slot: str) -> str
+  - serpapi_product_to_outfit_item(...) -> dict
+
+File: src/outfit_composer.py
+- Purpose: Compose outfits using retriever and wardrobe.
+- Class: OutfitComposer
+  - __init__(self, retriever=None, wardrobe_manager=None)
+  - _live_candidates_for_slot(...)
+  - compose(intent, ...) -> composed outfit (dict)
+
+File: src/retriever.py
+- Purpose: High-level retrieval logic for fashion items; builds filters and queries the FashionVectorStore.
+- Functions / Classes:
+  - build_filters(intent, slot: Optional[str] = None, include_color: bool = False, include_occasion: bool = True) -> Dict
+  - FashionRetriever
+    - __init__(self, store: FashionVectorStore, embedder)
+    - retrieve_for_slot(self, intent, slot: str, n_results: int = 12) -> List[Dict]
+
+File: src/rules.py
+- Purpose: Scoring and rule utilities for outfit composition and explanations.
+- Functions:
+  - occasion_groups(occasion: str) -> List[str]
+  - outfit_slots(occasion: str) -> List[str]
+  - color_match_score(base_color: Optional[str], item_color: Optional[str], slot: Optional[str] = None) -> float
+  - score_item(metadata: Dict, intent, slot: Optional[str] = None) -> float
+  - compute_look_score(look: Dict, intent) -> float
+  - build_explanation(look: Dict, intent) -> str
+
+File: src/serpapi_service.py
+- Purpose: SERPAPI/immersive search helpers and product resolution/normalization.
+- Functions (selection):
+  - get_api_key() -> str
+  - build_search_query(gender: str, category: str, store: str) -> str
+  - _extract_description(item: dict[str, Any]) -> str
+  - _store_matches(store_name: str, preferred_store: str) -> bool
+  - _is_direct_store_url(url: str) -> bool
+  - _pick_store_offer(...)
+  - _fetch_immersive_stores(api_url: str, api_key: str) -> list[dict[str, Any]]
+  - _resolve_product(...)
+
+File: src/vector_store.py
+- Purpose: Vector store adapter used by `src` modules.
+- Functions/Class: and_filter(filters: List[Dict]) -> Optional[Dict], FashionVectorStore with add/count/query/flatten_results methods.
+
+File: src/vision/body_masks.py
+- Purpose: Convert segmentation masks into binary masks and measurement masks.
+- Functions:
+  - create_mask(segmentation, class_id) -> mask
+  - create_measurement_mask(segmentation) -> measurement mask
+
+File: src/vision/classifier.py
+- Purpose: Classify front body shape from mask / image.
+- Functions:
+  - classify_front_shape(...) -> classification
+
+File: src/vision/geometry.py
+- Purpose: Geometry helpers for processing body masks and extracting contours, width profiles, and measurement rows.
+- Functions:
+  - get_largest_contour(mask) -> contour
+  - get_width_profile(mask) -> List[int]
+  - smooth_width_profile(width_profile) -> List[int]
+  - find_search_regions(...)
+  - detect_measurement_rows(...)
+  - estimate_bust_row(...)
+  - get_body_edges(mask, row) -> edges
+  - get_body_width(mask, row) -> width
+
+File: src/vision/pose.py
+- Purpose: Pose detection utilities used by body-shape analysis.
+- Functions:
+  - detect_pose(image_path) -> pose landmarks
+
+File: src/vision/segment2.py
+- Purpose: Body-shape segmentation and detection.
+- Functions:
+  - detect_body_shape(image_path) -> shape info
+
+File: src/wardrobe_manager.py
+- Purpose: Manage user's wardrobe stored in JSON, with CRUD operations and image storage.
+- Class: WardrobeManager
+  - __init__(self, db_path: str = "./wardrobe_db.json", image_dir: str = "./wardrobe_images")
+  - _read(self) -> List[Dict]
+  - _write(self, rows: List[Dict]) -> None
+  - list_items(self) -> List[Dict]
+  - count(self) -> int
+  - add_item(...) -> dict
+  - delete_item(self, item_id: str) -> bool
+  - clear(self) -> None
+
+File: tempCodeRunnerFile.py
+- Purpose: Likely temporary copy of `app.py` rendering helpers used by code-runner. Contains similar rendering helpers as `app.py`.
+- Functions: render_card_grid, render_alternative_cards, render_wardrobe_item, render_wardrobe_page, render_body_shape_page, render_owned_vs_missing, etc.
+
+Non-Python files (brief):
+- BACKEND_README.md — Documentation for backend run/setup.
+- README.md — Project README and high-level instructions.
+- environment.yml / requirements.txt / backend/requirements-backend.txt — Dependency manifests.
+- pose_landmarker.task — ML task config for pose landmarker.
+- wardrobe_db.json — Sample wardrobe DB file (JSON store).
+- frontend/index.html — Frontend UI entrypoint (HTML layout for the UI).
+- frontend/script.js — Frontend JavaScript for UI interactions and API calls.
+- frontend/style.css — Styles for the frontend UI.
+- data/fashion_knowledge_base.json — Knowledge base JSON used by RAG/knowledge modules.
+- fashion_item_images/ — Directory of dataset images used for indexing and demo.
+- fashion_vector_db_v2/ and knowledge_vector_db/ — Vector DB files (Chroma sqlite and collections).
+- imgs/ and wardrobe_images/ — Image assets used by the UI and wardrobe manager.
+- product_rag/ and rag/ — RAG components for product retrieval and domain knowledge retrieval.
+- test/ — Test assets (body-analysis-test).
+
+Notes and next steps:
+- Many functions/methods include docstrings and inline comments in their files. For full parameter-level documentation (docstrings, exceptions, examples), open each file and extract docstrings; I can generate a more detailed, docstring-extracted explanation if you'd like.
+- If you want the `explanation.txt` to be formatted differently (Markdown, CSV, or grouped by module), tell me the preferred format and I'll update it.
+
+Generated by automated scan of repository function definitions.

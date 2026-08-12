@@ -1,0 +1,46 @@
+{
+  "shape": "dB",
+  "name": "Full-Curve Side Profile (Chest, Belly & Butt)",
+  "summary": "Full-bodied side profile with forward chest/belly protrusion and rear gluteal depth.",
+  "style_goal": "Streamline overall profile volume with structured tailored lines, dark tones, and open vertical drape.",
+  "characteristics": [
+    "Prominent bust depth",
+    "Prominent belly depth",
+    "Prominent gluteal curve"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Tailored Vertical Stripe Shirt", "priority": 5, "reason": "Elongates torso side view."},
+      {"item": "Soft Wrap Top", "priority": 5, "reason": "Drapes chest and belly without constriction."}
+    ],
+    "bottoms": [
+      {"item": "Straight Dark Tailored Trousers", "priority": 5, "reason": "Creates clean vertical leg pillar."},
+      {"item": "Fluid Wide-Leg Pants", "priority": 5, "reason": "Skims comfortably past rear and hips."}
+    ],
+    "necklines": [
+      {"item": "V-Neck", "priority": 5, "reason": "Opens up upper neck area visually."}
+    ],
+    "dresses": [
+      {"item": "Empire Line Maxis", "priority": 5, "reason": "Flows cleanly from under bust to ankle."}
+    ],
+    "jackets": [
+      {"item": "Structured Single-Breasted Blazer", "priority": 5, "reason": "Flattens side profile contours."}
+    ],
+    "colors": [
+      {"item": "All-Dark Monochromatic Looks", "priority": 5, "reason": "Maximum side profile slimming effect."}
+    ]
+  },
+  "avoid": [
+    "Tight shiny clingy fabrics",
+    "Horizontal stripes",
+    "High stiff turtlenecks",
+    "Chunky waist belts"
+  ],
+  "reasoning": {
+    "overall": "Structured tailoring, open V-necks, and dark vertical columns streamline full-curve profiles."
+  },
+  "styling_tips": [
+    "Stick to matte fabrics like wool, crepe, matte jersey, or linen-cotton blends.",
+    "Pair dark monochrome base layers with an open blazer."
+  ]
+}

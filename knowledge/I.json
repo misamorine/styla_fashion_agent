@@ -1,0 +1,44 @@
+{
+  "shape": "I",
+  "name": "Balanced Side Profile",
+  "summary": "Even, linear side silhouette without extreme chest, belly, or butt protrusions.",
+  "style_goal": "Maintain proportional flow and enhance overall vertical lines with tailored structuring.",
+  "characteristics": [
+    "Proportionate bust depth",
+    "Flat stomach",
+    "Moderate gluteal curve"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Fitted Tops", "priority": 5, "reason": "Accentuates clean silhouette."},
+      {"item": "Tailored Shirts", "priority": 5, "reason": "Provides crisp side profile contours."}
+    ],
+    "bottoms": [
+      {"item": "Straight Trousers", "priority": 5, "reason": "Flatters balanced leg line."},
+      {"item": "Slim Fit Pants", "priority": 4, "reason": "Follows natural side line."}
+    ],
+    "necklines": [
+      {"item": "Crew Neck", "priority": 4, "reason": "Clean classic framing."},
+      {"item": "V-Neck", "priority": 5, "reason": "Elongates torso."}
+    ],
+    "dresses": [
+      {"item": "Sheath Dress", "priority": 5, "reason": "Shows balanced side profile."}
+    ],
+    "jackets": [
+      {"item": "Single-Breasted Blazer", "priority": 5, "reason": "Clean side lapel drape."}
+    ],
+    "colors": [
+      {"item": "Monochrome Outfits", "priority": 4, "reason": "Creates uninterrupted vertical lines."}
+    ]
+  },
+  "avoid": [
+    "Overly baggy boxy shapes"
+  ],
+  "reasoning": {
+    "overall": "Balanced side profile allows versatile silhouette choices with structured tailoring."
+  },
+  "styling_tips": [
+    "Tuck tops in to highlight natural waistline from the side.",
+    "Tailored layering adds depth to balanced profiles."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "shape": "d",
+  "name": "Prominent Butt Side Profile",
+  "summary": "Fuller gluteal projection visible in the rear side profile silhouette.",
+  "style_goal": "Accommodate rear volume comfortably while balancing lower body profile with structured upper layers.",
+  "characteristics": [
+    "Prominent gluteal curve",
+    "Flatter bust and stomach projection"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Structured Blazer Tops", "priority": 5, "reason": "Adds upper torso substance to balance rear curve."},
+      {"item": "Tuck-in Shirts", "priority": 5, "reason": "Highlights back waist curve."}
+    ],
+    "bottoms": [
+      {"item": "High-Waisted Contour Pants", "priority": 5, "reason": "Prevents rear waist gap."},
+      {"item": "A-Line Skirts", "priority": 5, "reason": "Flares comfortably over glutes."}
+    ],
+    "necklines": [
+      {"item": "Wide Necklines (Boat / Square)", "priority": 4, "reason": "Broadens shoulder line to balance hips."}
+    ],
+    "dresses": [
+      {"item": "Fit and Flare Dress", "priority": 5, "reason": "Roomy skirt drape over rear."}
+    ],
+    "jackets": [
+      {"item": "Mid-Thigh Blazer", "priority": 5, "reason": "Covers or skims smoothly past hip line."}
+    ],
+    "colors": [
+      {"item": "Light Tops + Dark Bottoms", "priority": 5, "reason": "Draws focus upward."}
+    ]
+  },
+  "avoid": [
+    "Rigid low-rise jeans",
+    "Flap pockets directly on rear glutes",
+    "Thin clingy leggings without tunic top"
+  ],
+  "reasoning": {
+    "overall": "High-waisted stretch bottoms and A-line cuts drape smoothly without pulling."
+  },
+  "styling_tips": [
+    "High-rise denim with curved waistbands prevents gaping when seated.",
+    "Layer jackets that end below the hip to streamline rear side profile."
+  ]
+}

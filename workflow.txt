@@ -1,0 +1,100 @@
+Project Workflow Overview
+
+This document explains the runtime/workflow for each primary UI tab and how frontend interactions map to backend modules, data stores, and outputs.
+
+1) Create Outfit
+- UI: "Create Outfit" form where the user enters a request (e.g., "outfit for a summer brunch, feminine, size M").
+- Frontend: `frontend/script.js` sends POST to backend `/create_outfit` (see [backend/main.py](backend/main.py)).
+- Backend flow:
+  - Request parsed into `CreateOutfitRequest` (pydantic) in `backend/main.py`.
+  - Intent parsing: `src/intent_parser.parse_intent(...)` converts free text into a structured `StyleIntent` (gender, occasion, slots, body_shape hint).
+  - Retrieval: `src/outfit_composer.OutfitComposer.compose()` orchestrates retrieval.
+    - Uses `src/retriever.FashionRetriever` which builds filters (`src/retriever.build_filters`) and queries the vector DB via `src/vector_store.FashionVectorStore` or `product_rag/vector_store.FashionVectorStore`.
+    - Embeddings: `src/embedder.FashionEmbedder` or `product_rag/embedder.FashionEmbedder` provide text/image embeddings.
+    - Optionally fetches live products via `src/live_outfit_search` or `src/duckduckgo_retriever` for up-to-date results.
+  - Scoring & composition: `src/rules.score_item` and `src/rules.compute_look_score` rank candidates and assemble a recommended look.
+  - Explanation: `src/rules.build_explanation` or `rag/prompt_builder` + `rag/llm` may be used to generate human-readable reasoning.
+  - Serialization: `backend/main.py.serialize_item` (and serialize_selected/serialize_alternatives) format items for the frontend, and `backend.enrich_product_display` enriches product dicts (media URLs, buy links).
+- Data stores: `fashion_vector_db_v2/` (vector DB), `fashion_item_images/` (media), optional live SERP via SerpAPI.
+- Frontend rendering: server returns JSON; UI uses rendering helpers in `app.py` (or `frontend/script.js`/`index.html`) to show card grids and owned-vs-missing indicators.
+
+Result: A composed outfit (one or more slots) with ranked items, explanations, and links.
+
+2) Shop For You
+- UI: "Shop For You" tab with search / preferences.
+- Frontend: sends POST to backend `/shop_for_you` (see [backend/main.py](backend/main.py)).
+- Backend flow:
+  - Request parsed into `ShopForYouRequest` model.
+  - Query embedding: embed the user query via `FashionEmbedder`.
+  - Vector search: query the product vector store (`product_rag/vector_store` or `src/vector_store`) for nearest items with optional filters (gender, store preference).
+  - Live retrieval: backend may call `src/serpapi_service`, `src/live_outfit_search`, or `src/duckduckgo_retriever` to fetch current items from stores (Amazon, Myntra, etc.).
+  - Parse results: `product_rag/product_retriever` or `src/serpapi_service` normalize product metadata and select best offers.
+  - Response: serialized product list via `backend.serialize_item` and `backend.enrich_product_display`.
+- Frontend rendering: product cards, buy links, and option to add to wardrobe.
+
+Result: A ranked list of purchasable products matching user's shopping intent.
+
+3) Body Shape (Analyze Body)
+- UI: "Body Shape" tab where user uploads a photo.
+- Frontend: sends multipart POST to backend `/analyze_body_shape` with the image file.
+- Backend flow:
+  - `backend.main.analyze_body_shape` receives `UploadFile`.
+  - Image processing: calls `src/vision/segment2.detect_body_shape(image_path)` to segment body and extract shape features; `src/vision/pose.detect_pose` may be used for landmark extraction.
+  - Measurements: `src/vision/geometry` computes width profiles and measurement rows to infer proportions.
+  - Classification: `src/vision/classifier.classify_front_shape` or heuristics map measurements to a body shape label (e.g., pear, apple, hourglass, rectangular).
+  - Knowledge & advice: `rag/knowledge_retriever` (or `src/body_shop_queries.load_shape_knowledge`) retrieves tailored styling advice. `rag/llm` may generate natural-language tips.
+  - Optional product suggestions: call `src/body_shop_queries.shoppable_queries_for_shape` then `src/live_outfit_search` to find shoppable items that fit the body-shape recommendations.
+  - Response: body shape label, measurements, visual overlays (masks/edges), stylist tips, and suggested products.
+- Frontend rendering: show annotated image, textual tips, and links to suggested items.
+
+Result: Body-shape classification, measurement data, styling tips, and optional product links.
+
+4) My Wardrobe
+- UI: "My Wardrobe" page showing user's saved garments, with add/delete controls.
+- Frontend: calls backend endpoints `/list_wardrobe`, `/add_wardrobe_item`, `/delete_wardrobe_item`, `/clear_wardrobe` in [backend/main.py](backend/main.py).
+- Backend flow:
+  - Persistence: `src/wardrobe_manager.WardrobeManager` manages wardrobe stored in `wardrobe_db.json` and saves uploaded images to `wardrobe_images/`.
+  - Add item: uploaded item is validated, optionally run through `src/catalog_utils.metadata_from_item` to infer slot/color; the image may be embedded via `src/embedder.image_embedding` to store vectors for later retrieval.
+  - Delete/clear/list: CRUD operations update the JSON and return current wardrobe state.
+  - Integration: `src/outfit_composer` and `create_outfit` use wardrobe items to mark owned vs missing and to prefer owned pieces when composing looks.
+- Frontend rendering: wardrobe grid (cards) with delete/add UI and option to include/exclude items from outfit composition.
+
+Result: Persistent personal wardrobe allowing composition and filtering, and integration into outfit recommendations.
+
+5) Stylist Chatbot
+- UI: "Stylist Chatbot" conversation UI.
+- Frontend: sends chat messages to backend chat route (e.g., `/chat` or `ChatRequest` in [backend/main.py](backend/main.py)).
+- Backend flow:
+  - Conversation handling: messages wrapped into `ChatRequest` / `ChatMessage` models.
+  - Context enrichment: backend may fetch user profile, recent wardrobe items, or previous conversation state to provide context.
+  - Knowledge retrieval: `rag/knowledge_retriever` fetches relevant domain knowledge (body-shape tips, occasion rules) from `knowledge_vector_db/`.
+  - Prompt building: `rag/prompt_builder.build_prompt` composes a prompt combining user message + retrieved knowledge + style rules.
+  - LLM call: `rag/llm.get_stylist_llm()` and `rag/llm.generate()` produce the response; may include recommended items or follow-up questions.
+  - Post-processing: parsed recommendations can be converted into structured suggestions using `product_rag/recommendation_parser.extract_recommendations` and product retrievers to include live product links.
+  - Response: chat text (and optional structured recommendations) returned to frontend.
+- Frontend rendering: chat bubbles with text, action buttons (e.g., "Shop these", "Add to wardrobe"), and links.
+
+Result: Multi-turn conversational styling advice with actionable recommendations and integration to shopping/wardrobe flows.
+
+Shared components & data stores
+- Embedding & retrieval: `src/embedder`, `rag/text_embedder`, and `product_rag/embedder` create embeddings for queries and items; vector indexes live in `fashion_vector_db_v2/` and `knowledge_vector_db/` (Chroma sqlite files).
+- RAG & LLM: `rag/*` and `product_rag/*` handle knowledge indexing, retrieval, prompt-building, and LLM generation.
+- Live search: `src/serpapi_service`, `src/live_outfit_search`, and `src/duckduckgo_retriever` handle live product fetching when up-to-date product data is required.
+- Frontend rendering helpers: server-side UI helpers in `app.py` produce HTML snippets; `frontend/script.js` drives client interactions.
+- Persistence: `wardrobe_db.json` for user wardrobe, image folders for media, and vector DB files for retrieval.
+
+Operational notes
+- Endpoints in [backend/main.py](backend/main.py) are central: they wire together intent parsing, retrieval, LLM calls, and serialization.
+- Many flows are asynchronous (file uploads, live web scraping, LLM calls); the backend uses async FastAPI endpoints where appropriate.
+- External dependencies: SerpAPI key, LLM API access, and model artifacts for embedding must be available for full functionality.
+- To run locally: start the backend (example used in workspace):
+
+```bash
+uvicorn backend.main:app --reload --port 8000
+```
+
+Next steps
+- I created `workflow.txt` summarizing the above flows. If you want, I can:
+  - Expand each flow into a detailed sequence diagram or step-by-step call chain per source file.
+  - Extract docstrings for each relevant function and append them to `workflow.txt` or produce a Markdown reference.
+

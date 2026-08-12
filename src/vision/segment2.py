@@ -354,8 +354,26 @@ def detect_body_shape(image_path):
         hip_width
     )
 
-    # print()
-    # print("----------------")
-    # print("BODY SHAPE:", shape)
-    # print("----------------")
     return shape
+
+
+def detect_dual_body_shape(front_image_path: str, side_image_path: str = None) -> tuple[str, str, str]:
+    """
+    Detects front profile shape and side profile shape from photo(s).
+
+    Returns:
+        (front_shape, side_shape, combined_shape) e.g. ('A', 'B', 'A-B')
+    """
+    front_shape = detect_body_shape(front_image_path)
+    
+    if side_image_path:
+        from .side_segment import detect_side_shape
+        try:
+            side_shape = detect_side_shape(side_image_path)
+        except Exception:
+            side_shape = "I"
+    else:
+        side_shape = "I"
+
+    combined_shape = f"{front_shape}-{side_shape}" if side_shape != "I" else front_shape
+    return front_shape, side_shape, combined_shape

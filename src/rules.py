@@ -100,25 +100,27 @@ def score_item(metadata: Dict, intent, slot: Optional[str] = None) -> float:
     if any(w.lower() in text for w in avoid_terms):
         score -= 45
 
-    # Body shape rule scoring (BSTI A, H, X, Y)
+    # Body shape rule scoring (2-view front + side profiles)
     if getattr(intent, "body_shape", None):
-        shape = intent.body_shape.upper()
-        kb_path = Path(__file__).resolve().parents[1] / "knowledge" / f"{shape}.json"
-        if kb_path.exists():
-            import json
-            with open(kb_path, "r", encoding="utf-8") as f:
-                shape_data = json.load(f)
-                avoid_list = shape_data.get("avoid", [])
-                if any(av.lower() in text for av in avoid_list):
-                    score -= 30
-                
-                recs = shape_data.get("recommendations", {})
-                for key, items in recs.items():
-                    if isinstance(items, list):
-                        for rec in items:
-                            rec_item = rec.get("item", "").lower() if isinstance(rec, dict) else str(rec).lower()
-                            if rec_item and rec_item in text:
-                                score += 15
+        shape_code = str(intent.body_shape).strip()
+        codes = [c.strip() for c in shape_code.split("-") if c.strip()]
+        for code in codes:
+            kb_path = Path(__file__).resolve().parents[1] / "knowledge" / f"{code}.json"
+            if kb_path.exists():
+                import json
+                with open(kb_path, "r", encoding="utf-8") as f:
+                    shape_data = json.load(f)
+                    avoid_list = shape_data.get("avoid", [])
+                    if any(av.lower() in text for av in avoid_list):
+                        score -= 30
+                    
+                    recs = shape_data.get("recommendations", {})
+                    for key, items in recs.items():
+                        if isinstance(items, list):
+                            for rec in items:
+                                rec_item = rec.get("item", "").lower() if isinstance(rec, dict) else str(rec).lower()
+                                if rec_item and rec_item in text:
+                                    score += 15
 
     return score
 
@@ -144,13 +146,15 @@ def build_explanation(look: Dict, intent) -> str:
         lines.append(f"The requested {intent.color} tone is prioritized for the main item and compatible supporting items.")
 
     if getattr(intent, "body_shape", None):
-        shape = intent.body_shape.upper()
-        kb_path = Path(__file__).resolve().parents[1] / "knowledge" / f"{shape}.json"
-        if kb_path.exists():
-            import json
-            with open(kb_path, "r", encoding="utf-8") as f:
-                shape_data = json.load(f)
-                lines.append(f"Body Shape Styling Goal ({shape_data.get('name', shape)}): {shape_data.get('style_goal', '')}")
+        shape_code = str(intent.body_shape).strip()
+        codes = [c.strip() for c in shape_code.split("-") if c.strip()]
+        for code in codes:
+            kb_path = Path(__file__).resolve().parents[1] / "knowledge" / f"{code}.json"
+            if kb_path.exists():
+                import json
+                with open(kb_path, "r", encoding="utf-8") as f:
+                    shape_data = json.load(f)
+                    lines.append(f"Body Shape Styling Goal ({shape_data.get('name', code)}): {shape_data.get('style_goal', '')}")
 
     principles = style_principles_for_occasion(intent.occasion)
     if principles:
@@ -167,6 +171,7 @@ def build_explanation(look: Dict, intent) -> str:
         lines.append("Selected outfit structure:")
         lines.extend(selected_bits)
 
-    lines.append("Selection method: ChromaDB metadata filters → Progressive relaxation → Body Shape (A/H/X/Y) scoring → FashionCLIP similarity.")
+    lines.append("Selection method: ChromaDB metadata filters → Progressive relaxation → 2-View Body Shape scoring → FashionCLIP similarity.")
     return "\n\n".join(lines)
+
 

@@ -1,0 +1,8 @@
+# Additive dependencies for the FastAPI backend.
+# This does NOT replace requirements.txt - install both:
+#   pip install -r requirements.txt
+#   pip install -r backend/requirements-backend.txt
+#
+# uvicorn is already pinned in requirements.txt (0.51.0).
+fastapi>=0.110.0
+python-multipart>=0.0.9

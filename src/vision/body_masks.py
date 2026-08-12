@@ -33,15 +33,30 @@ def create_mask(segmentation, class_id):
  
 def create_measurement_mask(segmentation):
     required_classes = [
-    LABELS["TOP"],
-    LABELS["DRESS"],
-    LABELS["TORSO"],
-    LABELS["PANTS"],
-    LABELS["SKIRT"],
-    LABELS["LEGS"]
+        LABELS["TOP"],
+        LABELS["DRESS"],
+        LABELS["TORSO"],
+        LABELS["PANTS"],
+        LABELS["SKIRT"],
+        LABELS["LEGS"]
     ]
     mask = np.isin(segmentation, required_classes)
     mask = mask.astype(np.uint8)
     mask = mask * 255
     return mask
-    
+
+
+def create_profile_measurement_mask(segmentation):
+    required_classes = [
+        LABELS["TOP"],
+        LABELS["DRESS"],
+        LABELS["TORSO"],
+        LABELS["PANTS"],
+        LABELS["SKIRT"],
+        LABELS["LEGS"]
+    ]
+    mask = np.isin(segmentation, required_classes)
+    mask = mask.astype(np.uint8)
+    mask = mask * 255
+    return mask
+

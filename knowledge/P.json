@@ -1,0 +1,44 @@
+{
+  "shape": "P",
+  "name": "Prominent Chest Side Profile",
+  "summary": "Fuller chest and bust projection relative to torso depth.",
+  "style_goal": "Elongate neck and torso lines while providing graceful bust support without bulk.",
+  "characteristics": [
+    "Prominent bust depth",
+    "Flatter belly and hips relative to bust"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Wrap Tops", "priority": 5, "reason": "Flatters chest depth gracefully."},
+      {"item": "V-Neck Tops", "priority": 5, "reason": "Draws focus vertically rather than horizontally."}
+    ],
+    "bottoms": [
+      {"item": "Wide-Leg Trousers", "priority": 5, "reason": "Balances upper body side volume."}
+    ],
+    "necklines": [
+      {"item": "Open V-Neck", "priority": 5, "reason": "De-clutters neck and chest area."},
+      {"item": "Sweetheart Neck", "priority": 4, "reason": "Softens bust profile."}
+    ],
+    "dresses": [
+      {"item": "Wrap Dress", "priority": 5, "reason": "Creates elegant crossover line."}
+    ],
+    "jackets": [
+      {"item": "Open Front Cardigans", "priority": 5, "reason": "Vertical lapels soften chest projection."}
+    ],
+    "colors": [
+      {"item": "Darker Tops + Light Bottoms", "priority": 4, "reason": "Visually minimizes chest prominence."}
+    ]
+  },
+  "avoid": [
+    "High stiff turtlenecks",
+    "Double-breasted thick coats",
+    "Chest ruffles and heavy pocket details"
+  ],
+  "reasoning": {
+    "overall": "Open necklines and fluid fabrics accommodate chest depth without creating bulk."
+  },
+  "styling_tips": [
+    "Opt for soft draping fabrics like silk, jersey, or rayon.",
+    "Unbutton upper blazer buttons to create a vertical visual break."
+  ]
+}

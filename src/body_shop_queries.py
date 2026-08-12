@@ -37,13 +37,46 @@ CONCRETE_TERMS = (
 
 
 def load_shape_knowledge(shape: str) -> dict[str, Any]:
-    """Load knowledge/{shape}.json for a BSTI body-shape code."""
-    code = (shape or "").strip().upper()
-    path = KNOWLEDGE_DIR / f"{code}.json"
-    if not path.exists():
-        raise FileNotFoundError(f"No body-shape knowledge file for '{code}' at {path}")
-    with path.open(encoding="utf-8") as f:
-        return json.load(f)
+    """Load knowledge/{shape}.json for single or compound body-shape codes (e.g., 'A', 'A-B')."""
+    raw_code = (shape or "").strip()
+    if not raw_code:
+        raise FileNotFoundError("No body shape specified")
+
+    codes = [c.strip().upper() for c in raw_code.split("-") if c.strip()]
+    merged_recommendations: dict[str, list] = {}
+    merged_avoid: list[str] = []
+    names: list[str] = []
+    style_goals: list[str] = []
+
+    for code in codes:
+        path = KNOWLEDGE_DIR / f"{code}.json"
+        if not path.exists():
+            continue
+        with path.open(encoding="utf-8") as f:
+            data = json.load(f)
+
+        if data.get("name"):
+            names.append(data["name"])
+        if data.get("style_goal"):
+            style_goals.append(data["style_goal"])
+        if data.get("avoid"):
+            merged_avoid.extend(data["avoid"])
+
+        recs = data.get("recommendations", {})
+        for cat, items in recs.items():
+            if cat not in merged_recommendations:
+                merged_recommendations[cat] = []
+            if isinstance(items, list):
+                merged_recommendations[cat].extend(items)
+
+    return {
+        "shape": raw_code,
+        "name": " + ".join(names) if names else raw_code,
+        "style_goal": " ".join(style_goals),
+        "recommendations": merged_recommendations,
+        "avoid": list(set(merged_avoid))
+    }
+
 
 
 def _to_search_term(item_name: str, category: str) -> str:

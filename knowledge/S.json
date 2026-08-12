@@ -1,0 +1,46 @@
+{
+  "shape": "S",
+  "name": "Prominent Chest & Butt Side Profile (S-Line)",
+  "summary": "Curved side profile with both prominent chest projection and prominent glute projection.",
+  "style_goal": "Emphasize natural waist definition and smooth transitions between upper and lower curves.",
+  "characteristics": [
+    "Prominent bust depth",
+    "Narrower waist depth",
+    "Prominent gluteal curve"
+  ],
+  "recommendations": {
+    "tops": [
+      {"item": "Fitted Wrap Tops", "priority": 5, "reason": "Accentuates S-curve waist definition."},
+      {"item": "Tailored Knitwear", "priority": 5, "reason": "Follows natural body contour smoothly."}
+    ],
+    "bottoms": [
+      {"item": "High-Waisted Stretch Jeans", "priority": 5, "reason": "Fits curved glute profile without waistband gap."},
+      {"item": "Pencil Skirt", "priority": 5, "reason": "Highlights natural side S-line."}
+    ],
+    "necklines": [
+      {"item": "Sweetheart Neck", "priority": 4, "reason": "Complements feminine bust line."},
+      {"item": "V-Neck", "priority": 5, "reason": "Elongates neckline."}
+    ],
+    "dresses": [
+      {"item": "Bodycon / Fitted Wrap Dress", "priority": 5, "reason": "Shows natural side curves elegantly."}
+    ],
+    "jackets": [
+      {"item": "Belted Trench Coat", "priority": 5, "reason": "Cinches waist and frames curves."}
+    ],
+    "colors": [
+      {"item": "Solid Tones with Accent Belt", "priority": 5, "reason": "Focuses attention on waist center."}
+    ]
+  },
+  "avoid": [
+    "Shapeless shift dresses",
+    "Boxy oversized tunics",
+    "Stiff non-stretch pants"
+  ],
+  "reasoning": {
+    "overall": "The S-curve profile is naturally balanced; defined waist styling showcases curves elegantly."
+  },
+  "styling_tips": [
+    "Look for jeans with elastane/spandex blend to prevent waist gaping at the back.",
+    "Use belts at the narrowest point of your waist."
+  ]
+}
